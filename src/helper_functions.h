@@ -236,4 +236,17 @@ inline bool read_landmark_data(std::string filename, std::vector<LandmarkObs>& o
 	return true;
 }
 
+//Helper function to compute multivariate Gaussian
+inline double sigmoidalDiff(double gt, double mu, double sigma) {
+    return pow(gt - mu, 2) / pow(sigma, 2) / 2;
+}
+
+// Multivariate Gaussian
+inline long double multivariateGaussProb(double sigmaX, double sigmaY, double x, double y, double mux, double muy) {
+    double xTerm = sigmoidalDiff(x, mux, sigmaX);
+    double yTerm = sigmoidalDiff(y, muy, sigmaY);
+    
+    return exp(-(xTerm + yTerm)) / (2. * M_PI * sigmaX * sigmaY);
+}
+
 #endif /* HELPER_FUNCTIONS_H_ */
